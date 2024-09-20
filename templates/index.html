@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FlaskApp</title>
+    <link rel="stylesheet" href='/static/main.css' />
+</head>
+
+<body>
+    <div class="">
+        <p>Welcome to <span style="color: #3491f6;">PresenTutor</span> - Where every slide tells a story.</p>
+        <textarea rows="34" cols="116" id="textarea-id" class="textarea-ey"></textarea>
+        <form id="upload-file" method="post" enctype="multipart/form-data">
+            <input id="submit-btn" type="button" value="Download PPTX" />
+            <label for="submit-btn" class="custom-file-upload" id="submit-btn-label">Download PPTx</label>
+        </form>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+          integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+          crossorigin="anonymous"></script>
+<script type="text/javascript">
+$(function() {
+    $('#submit-btn').click(function() {
+        download_file();
+    });
+});
+
+function write_json(data) {
+    $('#textarea-id').val(data);
+}
+
+function download_file() {
+    slideshow_json = $('#textarea-id').val();
+    $.ajax({
+        type: 'post',
+        url: '/set_content',
+        data: slideshow_json,
+        contentType: "application/json; charset=utf-8",
+        traditional: true,
+        success: function(data) {
+            console.log('Success!');
+            window.location = "/make_presentation";
+        },
+    });
+
+}
+
+
+
+    var the_bot;
+  window.watsonAssistantChatOptions = {
+    integrationID: "096a39e6-256a-46ac-935f-99216e5c4729", // The ID of this integration.
+    region: "jp-tok", // The region your integration is hosted in.
+    serviceInstanceID: "24a61468-110e-4043-b375-057d2ab8cf40", // The ID of your service instance.
+    openChatByDefault: true,
+    showRestartButton: true,
+    onLoad: async (instance) => {
+        function handler(event){
+            console.log("receive");
+            if (event.data.context.skills['actions skill'].skill_variables.hasOwnProperty('slideshow_json')) {
+                write_json(event.data.context.skills['actions skill'].skill_variables.slideshow_json);
+            }
+        }
+        function prehandler(event){
+           event.data.context.skills['actions skill'] = event.data.context.skills['actions skill'] || {};
+           event.data.context.skills['actions skill'].skill_variables = event.data.context.skills['actions skill'].skill_variables || {};
+           event.data.context.skills['actions skill'].skill_variables.environment = "app";
+        }
+        instance.on({type: 'pre:send', handler: prehandler});
+        instance.on({type: 'receive', handler: handler});
+        the_bot = instance;
+        await instance.render();
+    }
+  };
+  setTimeout(function(){
+    const t=document.createElement('script');
+    t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+    document.head.appendChild(t);
+  });
+</script>
+
+
+
+</body>
+
+</html>

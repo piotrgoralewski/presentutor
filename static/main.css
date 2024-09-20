@@ -1,0 +1,39 @@
+body {
+  background-color: #e9e9e9;
+}
+.center {
+    margin: auto;
+    width: fit-content;
+    text-align: center;
+}
+p {
+    font-family: sans-serif;
+    font-size: 1.5em;
+    color: black;
+}
+
+input {
+    display: none;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  color: #545454;
+  background-color: #3491f6;
+}
+
+.custom-file-upload-inactive {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  color: black;
+  background-color: #d2d2da;
+}
+
+.textarea-ey {
+  font-size: 16px;
+  background-color : white;
+  color: #111111;
+}
